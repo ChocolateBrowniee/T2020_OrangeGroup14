@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <head>
+        <meta charset="UTF-8">
+        <title>Customer details</title>
+        <link rel="stylesheet" href="./style.css">
+      
+      </head>
+      <div class="header">
+        <h1>Welcome to your account</h1>
+        <p><p id="demo"></p></p>
+        <!-- <p><p id="demo2"></p></p> -->
+      </div>
+    <body>
+<!-- /document.getElementById("demo").innerHTML += value; -->
+<script>
+function readTextFile(file,userName, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+            callback(rawFile.responseText);
+        }
+    }
+ 
+    rawFile.send(null);
+}
+
+</script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+var queryString = new Array();
+var value2 = ""
+
+$(function () {
+    if (queryString.length == 0) {
+        if (window.location.search.split('?').length > 1) {
+            var params = window.location.search.split('?')[1].split('&');
+            for (var i = 0; i < params.length; i++) {
+                var key = params[i].split('=')[0];
+                var value = decodeURIComponent(params[i].split('=')[1]);
+                queryString[key] = value;
+                document.getElementById("demo").innerHTML += value;
+                value2 = value 
+                
+            }
+        }
+    }
+     
+    // if (queryString["name"] != null && queryString["technology"] != null) {
+    //     var data = "<u>Values from QueryString</u><br /><br />";
+    //     data += "<b>Name:</b> " + queryString["name"] + " <b>Technology:</b> " + queryString["technology"];
+    //     $("#lblData").html(data);
+    // }
+});
+readTextFile("resources.json", value2 ,function(text){
+        document.getElementById("demo2").innerHTML += value2;
+        var obj = JSON.parse(text);
+        var results = [];
+        var searchField = "userName";
+        var searchVal = value2 ;
+        var tokenid = "tokenid"
+        
+        for (var i=0 ; i < obj.list.length ; i++)
+        {
+        if (obj.list[i][searchField] == searchVal) {
+        results.push(obj.list[i]);
+        document.getElementById("demo").innerHTML = obj.list[i][tokenid]
+
+        }
+        }
+
+
+
+
+        });
+</script>
+<!-- <body>
+<div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'London')">London</button>
+    <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+    <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+  </div>
+  
+  <div id="London" class="tabcontent">
+    <h3>London</h3>
+    <p>London is the capital city of England.</p>
+  </div>
+  
+  <div id="Paris" class="tabcontent">
+    <h3>Paris</h3>
+    <p>Paris is the capital of France.</p>
+  </div>
+  
+  <div id="Tokyo" class="tabcontent">
+    <h3>Tokyo</h3>
+    <p>Tokyo is the capital of Japan.</p>
+  </div>
+</body>
+     

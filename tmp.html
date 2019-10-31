@@ -1,0 +1,102 @@
+
+var url_string = "http://www.example.com/t.html?a=1&b=3&c=m2-m3-m4-m5"; //window.location.href
+var url = new URL(url_string);
+var c = url.searchParams.get("c");
+console.log(c);
+<div id="Table"></div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+
+var username;
+var customerid;
+    //http://techtrek-api-gateway.ap-southeast-1.elasticbeanstalk.com/customers/:customerId/details
+    $("#namebtn1").click(function() {
+        $.ajax({
+            url: "http://techtrek-api-gateway.ap-southeast-1.elasticbeanstalk.com/customers/"+$("#txt1").val(),
+            type: 'GET',
+            dataType: 'json',
+            headers: {"identity": "Group14",
+                        "token": "9f0ffe48-1e61-47d5-804f-205e769c7fde"},
+            success: function(res) {
+
+              jQuery('#dataholder').data('theobject',res);
+
+              username = jQuery('#dataholder').data('theobject').userName;
+             customerid = jQuery('#dataholder').data('theobject').customerId;
+              $('#username').html("UserName: "+username);
+              $('#customerid').html("CustomerID: " +customerid);
+            }
+            ,error: function(res, error){
+                console.log("failed" + error)
+              }
+        });
+    });
+  //http://techtrek-api-gateway.ap-southeast-1.elasticbeanstalk.com/customers/:customerId/details
+    $("#namebtn2").click(function() {
+        $.ajax({
+            url: "http://techtrek-api-gateway.ap-southeast-1.elasticbeanstalk.com/customers/"+customerid+"/details",
+            type: 'GET',
+            dataType: 'json',
+            headers: {"identity": "Group14",
+                        "token": "9f0ffe48-1e61-47d5-804f-205e769c7fde"},
+            success: function(res) {
+
+              jQuery('#dataholder').data('theobject',res);
+
+              var gender = jQuery('#dataholder').data('theobject').gender;
+              var firstName = jQuery('#dataholder').data('theobject').firstName;
+              var lastName = jQuery('#dataholder').data('theobject').lastName;
+              var lastLogIn = jQuery('#dataholder').data('theobject').lastLogIn;
+              var dateOfBirth = jQuery('#dataholder').data('theobject').dateOfBirth;
+
+
+              $('#gender').html("Gender: "+gender);
+              $('#firstName').html("First Name: " +firstName);
+               $('#lastName').html("Last Name: "+lastName);
+              $('#lastLogIn').html("Last Login: " +lastLogIn);
+              $('#dateOfBirth').html("Date Of Birth: " +dateOfBirth);
+              
+            }
+            ,error: function(res, error){
+                console.log("failed" + error)
+              }
+        });
+    });
+
+    
+    var today = new Date();
+    today = 2019+'-'+01+'-'+31;
+    document.getElementById("start").setAttribute("max", today);
+    document.getElementById("end").setAttribute("max", today);
+})
+
+</script>
+<body>
+  <input type="text" name="txtbx1" id="txt1" />
+  <br>
+    <input type="button" name="name" id="namebtn1" value="Get Customers(ID)" />
+    <input type="button" name="name" id="namebtn2" value="Load Customers Details" />
+    <div><label for="start">Start date:</label>
+
+    <p><input type="date" id="start" name="trip-start"
+       value="2018-07-22"
+       min="2018-01-01" max="2019-1-31">
+     </p>
+      <label for="start">End date:</label>
+     <p><input type="date" id="end" name="trip-end"
+       value="2018-07-22"
+       min="2018-01-01" max="2019-1-31">
+     </p></div>
+  <input type="button" name="name" id="namebtn3Date" value="Load Transaction" />
+    <div id="dataholder">
+      <p id="username"></p>
+      <p id="customerid"></p>
+      <p id="gender"></p>
+      <p id="firstName"></p>
+      <p id="lastName"></p>
+      <p id="lastLogIn"></p>
+      <p id="dateOfBirth"></p>
+    </div>
+  </div>
+</body>

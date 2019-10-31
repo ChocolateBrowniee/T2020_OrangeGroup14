@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="master.css">
+  </head>
+  <body style=" background: url(bg.jpeg) no-repeat center top; background-size: cover;" >
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+  $(function () {
+    $("#btnQueryString").bind("click", function () {
+      // document.getElementById("demo2").innerHTML = username;
+      var url = "index2.html?username=" + encodeURIComponent($("#txtName").val());
+      $.getJSON("login.json", function (data) {
+        var textname = document.getElementById("txtName").value
+        var password = document.getElementById("password").value
+        for (var i = 0; i < data.list.length; i++) {
+          if (data.list[i]["userName"] == textname && data.list[i]["password"] == password) {
+            window.location.href = url;
+          } else {
+            document.getElementById("demo2").innerHTML = "error"
+          }
+        }
+      })
+
+    });
+  });
+
+</script>
+    <div class="login-box">
+      <img src="logo.png" class="avatar" alt="Avatar Image">
+      <h1>Login Here</h1>
+      <form>
+        <!-- USERNAME INPUT -->
+        <label for="username">Username</label>
+        <input type="text" placeholder="username" id="txtName" name="Name" /><br />
+        <!-- PASSWORD INPUT -->
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="password" />
+        
+        <input type="button" name="name" id="btnQueryString" value="Login" />
+          <p id="demo2"></p>
+
+    </div>
+  </body>
+</html>

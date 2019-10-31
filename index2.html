@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+  var queryString = new Array();
+  var value2 = ""
+
+  function readTextFile(file, userName, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function () {
+      if (rawFile.readyState === 4 && rawFile.status == "200") {
+        callback(rawFile.responseText);
+      }
+    }
+
+    rawFile.send(null);
+  }
+
+  $(function () {
+    if (queryString.length == 0) {
+      if (window.location.search.split('?').length > 1) {
+        var params = window.location.search.split('?')[1].split('&');
+        for (var i = 0; i < params.length; i++) {
+          var key = params[i].split('=')[0];
+          var value = decodeURIComponent(params[i].split('=')[1]);
+          queryString[key] = value;
+          value2 = value
+          document.getElementById("demo").innerHTML += value2;
+
+        }
+      }
+    }
+  });
+  readTextFile("login.json", value2, function (text) {
+    var obj = JSON.parse(text);
+    var results = [];
+    var searchField = "userName";
+    var searchVal = value2;
+    var tokenid = "tokenid"
+
+    for (var i = 0; i < obj.list.length; i++) {
+      if (obj.list[i][searchField] == searchVal) {
+        results.push(obj.list[i]);
+        // document.getElementById("demo2").innerHTML = obj.list[i][tokenid]
+
+      }
+    }
+  });
+  function runURL1() {
+  
+      $.ajax({
+        url: "http://techtrek-api-gateway.ap-southeast-1.elasticbeanstalk.com/customers/" + customerid + "/details",
+        type: 'GET',
+        dataType: 'json',
+        headers: {
+          "identity": "Group14",
+          "token": "9f0ffe48-1e61-47d5-804f-205e769c7fde"
+        },
+        success: function (res) {
+
+          jQuery('#dataholder').data('theobject', res);
+
+          var gender = jQuery('#dataholder').data('theobject').gender;
+          var firstName = jQuery('#dataholder').data('theobject').firstName;
+          var lastName = jQuery('#dataholder').data('theobject').lastName;
+          var lastLogIn = jQuery('#dataholder').data('theobject').lastLogIn;
+          var dateOfBirth = jQuery('#dataholder').data('theobject').dateOfBirth;
+
+
+          $('#gender').html("Gender: " + gender);
+          $('#firstName').html("First Name: " + firstName);
+          $('#lastName').html("Last Name: " + lastName);
+          $('#lastLogIn').html("Last Login: " + lastLogIn);
+          $('#dateOfBirth').html("Date Of Birth: " + dateOfBirth);
+
+        }
+        , error: function (res, error) {
+          console.log("failed" + error)
+        }
+      });
+
+  }
+
+</script>
+<head>
+  <meta charset="utf-8">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="master.css">
+</head>
+<div class="header">
+  <h1>Welcome</h1>
+  <p>
+    <p id="demo"></p>
+  </p>
+  <button type="button" onclick="window.location.href='apicall3.html'">View Transaction History!</button>
+  <button type="button" onclick="window.location.href='apicall1.html'">Get Credit Cards </button>
+  <button type="button" onclick="window.location.href='apicall2.html'">Get Account</button>
+  <button type="button" onclick="window.location.href='apicall4.html'">Get Outstanding Balance of a credit account </button>
+  <button type="button" onclick="window.location.href='apicall5.html'">Get Balance of deposit Account</button>
+
+  <!-- <p><p id="demo2"></p></p> -->
+</div>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Create three equal columns that floats next to each other */
+  .column {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+    height: 300px;
+    /* Should be removed. Only for demonstration */
+  }
+
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+</style>
+
+</head>
+
+<body style=" background: url(bg.jpeg) no-repeat center top; background-size: cover;">
+
+  <p id="nameidtag"></p>
+  <p id="idtag"></p>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+  
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+  
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+  <div class="row">
+    <div class="column" style="background-color:#aaa;  height: 500px">
+      <h2>Subscribed Financial Products</h2>
+    <table style="width:100%">
+      <tr>
+        <th>S/N</th>
+        <th>Product </th>
+        <th>Paid?</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Aviva</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Standard Charted</td>
+        <td>No <a>(Pay Now?)</a></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Great Eastern Accident Plan</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Axa Group Term Life</td>
+        <td>Overdue</td>
+      </tr>
+     
+    </table>
+<p>Items located here are the financial products that are bought by the user, the user can keep track of all the expenses from the subscribed products and can proceed to use paylah to make payment. Providing an all in one platform to keep the user's life in track.</p>
+    </div>
+    <div class="column" style="background-color:#bbb; ; height: 500px">
+      <h2>Recomendations</h2>
+      <p>Based on your saving patterns and your goal to <u> SAVE </u>, we recommend these few steps to save more money </p>
+  
+          <ol>
+            <li>Buy used items. We remember to buy used items with some purchases, like cars and video games</li>
+            <li>Wait a day before you make a purchase. This is crucial for big purchases</li>
+            <li>Buy in bulk</li>
+            <li>Treat yourself once in a while</li>
+            <li>Shop around</li>
+            <li>Use cash</li>
+            <li>Borrow (or buy) from your friends</li>
+            <li>Cook instead of eating out.</li>
+          </ol>
+
+<h2>Milestones</h2>
+         <ol>
+            <li><strike>Save $100</strike></li>
+            <li><strike>Save $200</strike></li>
+          <li><strike>Save $300</strike></li>
+           <li>Save $400</li>
+
+          </ol>
+
+      </div>
+    <div class="column" style="background-color:#ccc;  height: 500px ">
+      <h2>Rewards (Current Points : 1000)</h2>
+    <div class="container">
+    
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">Select</th>
+                <th scope="col">Item</th>
+                <th scope="col">Partner</th>
+                <th scope="col">Points Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                    <label class="custom-control-label" for="customCheck1">1</label>
+                  </div>
+                </td>
+                <td>Bubble Tea</td>
+                <td>Gong Cha</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck2">
+                    <label class="custom-control-label" for="customCheck2">2</label>
+                  </div>
+                </td>
+                <td>Fried Chicken</td>
+                <td>Jolibee</td>
+                <td>500</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck3">
+                    <label class="custom-control-label" for="customCheck3">3</label>
+                  </div>
+                </td>
+                <td>Waffles</td>
+                <td>Prima Deli</td>
+                <td>100</td>
+              </tr>
+            </tbody>
+          </table>
+  </div><button type="button">Redeem!</button>
+
+        </div>
+      </div>
+    </div>
+
+    </div>
+       
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <div id="chart_div"></div>
+<div id ="chart_div"style="height : 500px">
+  <p id="showData"></p>
+  <script>
+  google.charts.load('current', { packages: ['corechart', 'bar'] });
+    google.charts.setOnLoadCallback(drawBarColors);
+
+    function drawBarColors() {
+      var data = google.visualization.arrayToDataTable([
+        ['Spent', '2018 Spent', '2019 Spent'],
+        ['January', 80, 10],
+        ['Febuary', 200, 230],
+        ['March', 110, 23],
+        ['April', 110, 124],
+        ['May', 130, 11],
+         ['June', 100, 120],
+          ['July', 80, 180],
+           ['Aug', 50, 100],
+            ['Sept', 123, 60],
+             ['Oct', 152, 0],
+              ['Nov', 260, 0],
+               ['Dec', 150, 0]
+      ]);
+
+      var options = {
+        title: 'Spending Tracker  ',
+        chartArea: { width: '50%'  },
+        colors: ['#b0120a', '#ffab91'],
+        hAxis: {
+          title: 'Total Amount Spent',
+          minValue: 0
+        },
+        vAxis: {
+          title: 'Months'
+        }
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }</script>
+</div>
+</body>
+</head>
